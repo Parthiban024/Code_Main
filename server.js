@@ -12,6 +12,14 @@ const ReviewTwo = require('./backend/models/timechamp');
 const ReviewThree = require('./backend/models/hrreview');
 require('dotenv').config(); // load environment variables from .env file
 
+
+
+
+let reviews = [];
+let timechamp = [];
+let hrreview = [];
+
+
 const app = express();
 app.use(cors());
 // setup body-parser middleware to parse request bodies
@@ -34,6 +42,7 @@ app.use('/api', router);
 
 // Add a new review
 app.post('/api/reviews', (req, res) => {
+
   const { employeeName, employeeId, emailId, systemNo, systemType, systemTypetwo, unitNo, floorNo, teamName, teamManager, priority, issueDate, description } = req.body;
 
   const newReview = new Review({
@@ -58,10 +67,10 @@ employeeName, employeeId, emailId, systemNo, systemType, systemTypetwo, unitNo, 
     }
   })
   const mailOptions = {
-    from: `${employeeName}`,
-    to: 'balamuruganveerappan@objectways.com',
-    cc: 'parthibaneee7548@gmail.com',
-    subject: `New Ticket from ${req.body.employeeName}`,
+    from: 'New-Ticket <itsupport@objectways.com>',
+    to: 'itsupport@objectways.com',
+    cc: 'parthiban@objectways.com',
+    subject: `New Ticket from the employee ID ${req.body.employeeId}`,
     text: `Name: ${req.body.employeeName}\nEmail: ${req.body.emailId}\nMessage: ${req.body.description}`, // plain text body
     html: `<p>Name: ${req.body.employeeName}</p><p>Email: ${req.body.emailId}</p><p>Issue: ${req.body.systemType}</p><p>Message: ${req.body.description}</p>` // html body
   }
@@ -103,12 +112,12 @@ app.post('/api/timechamp', (req, res) => {
     }
   })
   const mailOptions = {
-    from: `${employeeIdTwo}`,
-    to: 'balamuruganveerappan@objectways.com',
-    cc: 'parthibaneee7548@gmail.com',
-    subject: `New Ticket from ${req.body.systemTypeTwo}`,
+    from: 'New-Ticket <loganathanvenkatesh@objectways.com>',
+    to: 'hrm@objectways.com',
+    cc: 'loganathanvenkatesh@objectways.com',
+    subject: `New Ticket from the team ${req.body.systemTypeTwo}`,
     text: `Team Name: ${req.body.systemTypeTwo}\nTeam Manager: ${req.body.systemNoTwo}\nMessage: ${req.body.descriptionTwo}`, // plain text body
-    html: `<p>Team Name: ${req.body.systemTypeTwo}</p><p>Team Manager: ${req.body.systemNoTwo}</p><p>Issue: ${req.body.priorityTwo}</p><p>Message: ${req.body.descriptionTwo}</p>` // html body
+    html: `<p>Team Name: ${req.body.systemTypeTwo}</p><p>Team Manager: ${req.body.systemNoTwo}</p><p>Issue: ${req.body.employeeIdTwo}</p><p>Message: ${req.body.descriptionTwo}</p>` // html body
   }
   transpoter.sendMail(mailOptions, function (error, info) {
     if (err) {
@@ -124,6 +133,8 @@ app.post('/api/timechamp', (req, res) => {
 
 // Add a new review
 app.post('/api/hrreview', (req, res) => {
+
+
   const { employeeNameThree, employeeIdThree, systemNoThree, systemTypeThree, floorNoThree, unitNoThree, teamNameThree, teamManagerThree, priorityThree, issueDateThree, descriptionThree } = req.body;
 
   const newReviewThree = new ReviewThree({
@@ -149,12 +160,12 @@ app.post('/api/hrreview', (req, res) => {
     }
   })
   const mailOptions = {
-    from: `${employeeNameThree}`,
-    to: 'balamuruganveerappan@objectways.com',
-    cc: 'parthibaneee7548@gmail.com',
-    subject: `New Ticket from ${req.body.employeeNameThree}`,
-    text: `Name: ${req.body.employeeNameThree}\nEmail: ${req.body.employeeIdThree}\nMessage: ${req.body.descriptionThree}`, // plain text body
-    html: `<p>Name: ${req.body.employeeNameThree}</p><p>Email: ${req.body.employeeIdThree}</p><p>Issue: ${req.body.systemTypeThree}</p><p>Message: ${req.body.descriptionTwo}</p>` // html body
+    from: 'New-Ticket <hrm@objectways.com>',
+    to: 'hrm@objectways.com',
+    cc: 'parthiban@objectways.com',
+    subject: `New Ticket from the employee ID ${req.body.employeeNameThree}`,
+    text: `Name: ${req.body.systemNoThree}\nEmail: ${req.body.employeeIdThree}\nMessage: ${req.body.descriptionThree}`, // plain text body
+    html: `<p>Name: ${req.body.systemNoThree}</p><p>Email: ${req.body.employeeIdThree}</p><p>Issue: ${req.body.floorNoThree}</p><p>Message: ${req.body.descriptionThree}</p>` // html body
   }
   transpoter.sendMail(mailOptions, function (error, info) {
     if (err) {
@@ -185,6 +196,7 @@ app.get('/api/timechamp', async (req, res) => {
   try {
     const reviewstwo = await ReviewTwo.find({});
     res.send(reviewstwo);
+    res.send(timechamp);
   } catch (err) {
     console.log(err);
     res.status(500).send('Error getting reviews');
@@ -196,6 +208,7 @@ app.get('/api/hrreview', async (req, res) => {
   try {
     const reviewsthree = await ReviewThree.find({});
     res.send(reviewsthree);
+    res.send(hrreview);
   } catch (err) {
     console.log(err);
     res.status(500).send('Error getting reviews');
@@ -285,7 +298,7 @@ app.post('/api/send-email', (req, res) => {
   });
 
   const mailOptions = {
-    from: 'parthibaneee7548@gmail.com', // replace with your Gmail address
+    from: 'IT-Support <itsupport@objectways.com>', // replace with your Gmail address
     to: emailData.to,
     subject: emailData.subject,
     text: emailData.text
@@ -340,7 +353,7 @@ app.post('/api/send-emailhr', (req, res) => {
   });
 
   const mailOptions = {
-    from: 'parthibaneee7548@gmail.com', // replace with your Gmail address
+    from: 'HRM <hrm@objectways.com>', // replace with your Gmail address
     to: emailData.to,
     subject: emailData.subject,
     text: emailData.text
@@ -394,7 +407,7 @@ app.post('/api/send-emailtc', (req, res) => {
   });
 
   const mailOptions = {
-    from: 'parthibaneee7548@gmail.com', // replace with your Gmail address
+    from: 'Facility-Support <loganathanvenkatesh@objectways.com>', // replace with your Gmail address
     to: emailData.to,
     subject: emailData.subject,
     text: emailData.text
@@ -421,7 +434,7 @@ app.get('*', function (req, res) {
 
 
 // port
-const port = process.env.PORT || 8001
+const port = process.env.PORT || 8080
 
 app.listen(port, () => {
   console.log(`Server listening on port ${port}`);

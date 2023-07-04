@@ -12,6 +12,14 @@ const reviewtwoSchema = new mongoose.Schema({
     priorityTwo: String,
     issueDateTwo: String,
     descriptionTwo: String,
+    accepted: {
+      type: Boolean,
+      default: false
+    },
+    resolved: {
+      type: Boolean,
+      default: false
+    }
   });
   const ReviewTwo = mongoose.model('Reviewtwo', reviewtwoSchema);
 

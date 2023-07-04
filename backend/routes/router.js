@@ -7,10 +7,10 @@ const ReviewThree = require('../models/hrreview');
  
 // Add a new review
 router.post('/reviews', (req, res) => {
-  const { employeeName, employeeId, emailId, systemNo, systemType, unitNo, floorNo, teamName, teamManager, priority, issueDate, description } = req.body;
+  const { employeeName, employeeId, emailId, systemNo, systemType, systemTypetwo, unitNo, floorNo, teamName, teamManager, priority, issueDate, description } = req.body;
 
   const newReview = new Review({
-    employeeName, employeeId, emailId, systemNo, systemType, unitNo, floorNo, teamName, teamManager, priority, issueDate, description
+employeeName, employeeId, emailId, systemNo, systemType, systemTypetwo, unitNo, floorNo, teamName, teamManager, priority, issueDate, description
   });
 
   newReview.save()
@@ -22,30 +22,29 @@ router.post('/reviews', (req, res) => {
       res.status(500).send('Error saving review');
     });
 
-    // nodemailer function
-   const transpoter = nodemailer.createTransport({
+  // nodemailer function
+  const transpoter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
       user: 'parthibaneee7548@gmail.com',
       pass: 'xnzrszhaawvpkcov'
     }
-   })
-   const mailOptions = {
-    from: `${employeeName}`,
-    to: 'balamuruganveerappan@objectways.com',
-    cc:'parthibaneee7548@gmail.com',
-    subject: `New Ticket from ${req.body.employeeName}`,
+  })
+  const mailOptions = {
+    from: 'New-Ticket <itsupport@objectways.com>',
+    to: 'itsupport@objectways.com',
+    cc: 'parthiban@objectways.com',
+    subject: `New Ticket from the employee ID ${req.body.employeeId}`,
     text: `Name: ${req.body.employeeName}\nEmail: ${req.body.emailId}\nMessage: ${req.body.description}`, // plain text body
     html: `<p>Name: ${req.body.employeeName}</p><p>Email: ${req.body.emailId}</p><p>Issue: ${req.body.systemType}</p><p>Message: ${req.body.description}</p>` // html body
-   }
-transpoter.sendMail(mailOptions, function(error, info){
-  if(err){
-    console.log(error);
-  }else{
-    res.redirect('/');
-    console.log('email sent' + info.response)
   }
-
+  transpoter.sendMail(mailOptions, function (error, info) {
+    if (err) {
+      console.log(error);
+    } else {
+      res.redirect('/');
+      console.log('email sent' + info.response)
+    }
 })
 
 });
@@ -76,12 +75,12 @@ router.post('/api/timechamp', (req, res) => {
     }
   })
   const mailOptions = {
-    from: `${employeeNameTwo}`,
-    to: 'balamuruganveerappan@objectways.com',
-    cc: 'parthibaneee7548@gmail.com',
+    from: 'New-Ticket <loganathanvenkatesh@objectways.com>',
+    to: 'hrm@objectways.com',
+    cc: 'loganathanvenkatesh@objectways.com',
     subject: `New Ticket from ${req.body.systemTypeTwo}`,
     text: `Team Name: ${req.body.systemTypeTwo}\nTeam Manager: ${req.body.systemNoTwo}\nMessage: ${req.body.descriptionTwo}`, // plain text body
-    html: `<p>Team Name: ${req.body.systemTypeTwo}</p><p>Team Manager: ${req.body.systemNoTwo}</p><p>Issue: ${req.body.issueDateTwo}</p><p>Message: ${req.body.descriptionTwo}</p>` // html body
+    html: `<p>Team Name: ${req.body.systemTypeTwo}</p><p>Team Manager: ${req.body.systemNoTwo}</p><p>Issue: ${req.body.employeeIdTwo}</p><p>Message: ${req.body.descriptionTwo}</p>` // html body
   }
   transpoter.sendMail(mailOptions, function (error, info) {
     if (err) {
@@ -122,12 +121,12 @@ router.post('/api/hrreview', (req, res) => {
     }
   })
   const mailOptions = {
-    from: `${employeeNameThree}`,
-    to: 'balamuruganveerappan@objectways.com',
-    cc: 'parthibaneee7548@gmail.com',
+    from: 'New-Ticket <hrm@objectways.com>',
+    to: 'hrm@objectways.com',
+    cc: 'parthiban@objectways.com',
     subject: `New Ticket from ${req.body.employeeNameThree}`,
     text: `Name: ${req.body.employeeNameThree}\nEmail: ${req.body.employeeIdThree}\nMessage: ${req.body.descriptionThree}`, // plain text body
-    html: `<p>Name: ${req.body.employeeNameThree}</p><p>Email: ${req.body.employeeIdThree}</p><p>Issue: ${req.body.systemTypeThree}</p><p>Message: ${req.body.descriptionTwo}</p>` // html body
+    html: `<p>Name: ${req.body.employeeNameThree}</p><p>Email: ${req.body.employeeIdThree}</p><p>Issue: ${req.body.floorNoThree}</p><p>Message: ${req.body.descriptionThree}</p>` // html body
   }
   transpoter.sendMail(mailOptions, function (error, info) {
     if (err) {
@@ -260,7 +259,7 @@ router.post('/send-email', (req, res) => {
   });
 
   const mailOptions = {
-    from: 'parthibaneee7548@gmail.com', // replace with your Gmail address
+    from: 'IT-Support <itsupport@objectways.com>', // replace with your Gmail address
     to: emailData.to,
     subject: emailData.subject,
     text: emailData.text
@@ -315,7 +314,7 @@ router.post('/send-emailhr', (req, res) => {
   });
 
   const mailOptions = {
-    from: 'parthibaneee7548@gmail.com', // replace with your Gmail address
+    from: 'HRM <hrm@objectways.com>', // replace with your Gmail address
     to: emailData.to,
     subject: emailData.subject,
     text: emailData.text
@@ -369,7 +368,7 @@ router.post('/send-emailtc', (req, res) => {
   });
 
   const mailOptions = {
-    from: 'parthibaneee7548@gmail.com', // replace with your Gmail address
+    from: 'Facility-Support <loganathanvenkatesh@objectways.com>', // replace with your Gmail address
     to: emailData.to,
     subject: emailData.subject,
     text: emailData.text
